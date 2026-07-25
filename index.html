@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta
+      name="description"
+      content="Fast and simple basic and scientific calculator for everyday use."
+    />
+    <title>Easy Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-bar">
+        <a class="brand" href="index.html">EasyCalc</a>
+        <nav class="top-nav">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="blog/index.html">Blog</a>
+          <a href="faq.html">FAQ</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+      </div>
+    </header>
+
+    <main class="container main-grid">
+      <section class="main-content">
+        <div class="hero-card">
+          <div class="hero-copy">
+            <p class="eyebrow">Quick and simple</p>
+            <h1>Use a clean calculator for everyday math in seconds.</h1>
+            <p>
+              Switch between basic and scientific modes, keep a short calculation history, and use
+              the dark mode whenever you want a calmer screen.
+            </p>
+          </div>
+        </div>
+
+        <section class="calculator-card" aria-label="Calculator">
+          <div class="calculator-toolbar">
+            <div class="tabs" role="tablist" aria-label="Calculator modes">
+              <button class="tab-btn active" data-target="basic">Basic</button>
+              <button class="tab-btn" data-target="scientific">Scientific</button>
+            </div>
+            <div class="toolbar-actions">
+              <button class="ghost-btn" id="copyResult">Copy result</button>
+              <button class="ghost-btn" id="modeToggle">Deg</button>
+            </div>
+          </div>
+
+          <div class="display-area">
+            <div class="history-preview" id="historyPreview">No calculations yet.</div>
+            <div class="display" id="display">0</div>
+          </div>
+
+          <div class="calculator-panel active" id="basicPanel">
+            <div class="button-grid basic-grid">
+              <button class="btn action" data-value="clear">C</button>
+              <button class="btn action" data-value="backspace">⌫</button>
+              <button class="btn action" data-value="percent">%</button>
+              <button class="btn operator" data-value="/">÷</button>
+              <button class="btn number" data-value="7">7</button>
+              <button class="btn number" data-value="8">8</button>
+              <button class="btn number" data-value="9">9</button>
+              <button class="btn operator" data-value="*">×</button>
+              <button class="btn number" data-value="4">4</button>
+              <button class="btn number" data-value="5">5</button>
+              <button class="btn number" data-value="6">6</button>
+              <button class="btn operator" data-value="-">−</button>
+              <button class="btn number" data-value="1">1</button>
+              <button class="btn number" data-value="2">2</button>
+              <button class="btn number" data-value="3">3</button>
+              <button class="btn operator" data-value="+">+</button>
+              <button class="btn number" data-value="0">0</button>
+              <button class="btn number" data-value=".">.</button>
+              <button class="btn action" data-value="negate">±</button>
+              <button class="btn equals" data-value="=">=</button>
+            </div>
+          </div>
+
+          <div class="calculator-panel" id="scientificPanel">
+            <div class="button-grid scientific-grid">
+              <button class="btn function" data-value="sin(">sin</button>
+              <button class="btn function" data-value="cos(">cos</button>
+              <button class="btn function" data-value="tan(">tan</button>
+              <button class="btn function" data-value="log(">log</button>
+              <button class="btn function" data-value="ln(">ln</button>
+              <button class="btn function" data-value="exp(">exp</button>
+              <button class="btn function" data-value="pi">π</button>
+              <button class="btn function" data-value="e">e</button>
+              <button class="btn function" data-value="^2">x²</button>
+              <button class="btn function" data-value="^3">x³</button>
+              <button class="btn function" data-value="^">xʸ</button>
+              <button class="btn function" data-value="sqrt(">√</button>
+              <button class="btn function" data-value="cbrt(">∛</button>
+              <button class="btn function" data-value="!">x!</button>
+              <button class="btn function" data-value="(">(</button>
+              <button class="btn function" data-value=")">)</button>
+              <button class="btn action" data-value="clear">C</button>
+              <button class="btn action" data-value="backspace">⌫</button>
+              <button class="btn operator" data-value="/">÷</button>
+              <button class="btn operator" data-value="*">×</button>
+              <button class="btn number" data-value="7">7</button>
+              <button class="btn number" data-value="8">8</button>
+              <button class="btn number" data-value="9">9</button>
+              <button class="btn operator" data-value="-">−</button>
+              <button class="btn number" data-value="4">4</button>
+              <button class="btn number" data-value="5">5</button>
+              <button class="btn number" data-value="6">6</button>
+              <button class="btn operator" data-value="+">+</button>
+              <button class="btn number" data-value="1">1</button>
+              <button class="btn number" data-value="2">2</button>
+              <button class="btn number" data-value="3">3</button>
+              <button class="btn equals" data-value="=">=</button>
+              <button class="btn number" data-value="0">0</button>
+              <button class="btn number" data-value=".">.</button>
+              <button class="btn action" data-value="negate">±</button>
+              <button class="btn action" data-value="percent">%</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <h2>Helpful shortcuts</h2>
+          <p>These quick links can help you find useful math tips without leaving the page.</p>
+          <div class="card-grid">
+            <article class="info-card">
+              <h3>Percentages</h3>
+              <p>Use simple percentage calculations for discounts, tips, and everyday totals.</p>
+              <a href="blog/percentage-mastery.html">Open article</a>
+            </article>
+            <article class="info-card">
+              <h3>Scientific tools</h3>
+              <p>Learn how trig, logs, and powers work in the scientific mode.</p>
+              <a href="blog/how-to-use-scientific-calculator.html">Open article</a>
+            </article>
+            <article class="info-card">
+              <h3>Math tips</h3>
+              <p>Try a few fast mental math tricks that make everyday calculations easier.</p>
+              <a href="blog/math-tricks-for-speed.html">Open article</a>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <aside class="sidebar">
+        <section class="history-card">
+          <div class="card-title-row">
+            <h2>Calculation history</h2>
+            <button class="ghost-btn" id="clearHistory">Clear</button>
+          </div>
+          <ul id="historyList" class="history-list"></ul>
+        </section>
+
+        <section class="info-card sidebar-card">
+          <h3>Helpful reading</h3>
+          <ul>
+            <li><a href="blog/trigonometry-explained.html">Trigonometry explained simply</a></li>
+            <li><a href="blog/logarithms-made-simple.html">Logarithms made simple</a></li>
+            <li><a href="faq.html">Frequently asked questions</a></li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <p>© 2026 EasyCalc. A simple calculator website for quick everyday use.</p>
+        <nav>
+          <a href="about.html">About</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="js/calculator.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
