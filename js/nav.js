@@ -1,7 +1,6 @@
 (function () {
   const navToggle = document.getElementById('navToggle');
   const topNav = document.getElementById('topNav');
-
   if (navToggle && topNav) {
     navToggle.addEventListener('click', () => {
       const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';

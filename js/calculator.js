@@ -1,260 +1,278 @@
-const calculatorState = {
-  expression: "",
-  result: "0",
-  degreeMode: true,
-};
-
-const displayEl = document.getElementById("display");
-const historyPreviewEl = document.getElementById("historyPreview");
-const copyResultBtn = document.getElementById("copyResult");
-const modeToggleBtn = document.getElementById("modeToggle");
-
-function updateDisplay() {
-  if (displayEl) {
-    displayEl.textContent = calculatorState.expression || calculatorState.result || "0";
-  }
-}
-
-function updatePreview() {
-  if (historyPreviewEl) {
-    historyPreviewEl.textContent = calculatorState.result === "0"
-      ? "No calculations yet."
-      : `Last result: ${calculatorState.result}`;
-  }
-}
-
-function appendValue(value) {
-  const lastChar = calculatorState.expression.slice(-1);
-
-  if (value === "pi") {
-    calculatorState.expression += "π";
-  } else if (value === "e") {
-    calculatorState.expression += "e";
-  } else if (value === "sqrt(") {
-    calculatorState.expression += "√";
-  } else if (value === "cbrt(") {
-    calculatorState.expression += "∛";
-  } else if (value === "^2") {
-    calculatorState.expression += "²";
-  } else if (value === "^3") {
-    calculatorState.expression += "³";
-  } else if (value === "^") {
-    calculatorState.expression += "^";
-  } else {
-    calculatorState.expression += value;
-  }
-
-  if (/[+\-*/]$/.test(lastChar) && value === "0") {
-    calculatorState.expression = calculatorState.expression.slice(0, -1);
-  }
-
-  updateDisplay();
-}
-
-function clearExpression() {
-  calculatorState.expression = "";
-  calculatorState.result = "0";
-  updateDisplay();
-  updatePreview();
-}
-
-function backspace() {
-  calculatorState.expression = calculatorState.expression.slice(0, -1);
-  updateDisplay();
-}
-
-function negate() {
-  if (!calculatorState.expression) {
-    calculatorState.expression = "-";
-  } else if (/^-/.test(calculatorState.expression)) {
-    calculatorState.expression = calculatorState.expression.slice(1);
-  } else {
-    calculatorState.expression = `-${calculatorState.expression}`;
-  }
-  updateDisplay();
-}
-
-function sanitizeExpression(rawExpression) {
-  return rawExpression
-    .replace(/×/g, "*")
-    .replace(/÷/g, "/")
-    .replace(/π/g, "Math.PI")
-    .replace(/e/g, "Math.E")
-    .replace(/√/g, "sqrt")
-    .replace(/∛/g, "cbrt")
-    .replace(/²/g, "^2")
-    .replace(/³/g, "^3")
-    .replace(/%/g, "/100")
-    .replace(/\^/g, "**")
-    .replace(/sin\(/g, "sinDeg(")
-    .replace(/cos\(/g, "cosDeg(")
-    .replace(/tan\(/g, "tanDeg(")
-    .replace(/asin\(/g, "asinDeg(")
-    .replace(/acos\(/g, "acosDeg(")
-    .replace(/atan\(/g, "atanDeg(")
-    .replace(/log\(/g, "log10(")
-    .replace(/ln\(/g, "lnMath(")
-    .replace(/exp\(/g, "expMath(")
-    .replace(/sqrt\(/g, "sqrtMath(")
-    .replace(/cbrt\(/g, "cbrtMath(");
-}
-
-function factorial(value) {
-  const num = Number(value);
-  if (!Number.isInteger(num) || num < 0) {
-    return NaN;
-  }
-  if (num === 0 || num === 1) {
-    return 1;
-  }
-  let result = 1;
-  for (let i = 2; i <= num; i += 1) {
-    result *= i;
-  }
-  return result;
-}
-
-function evaluateExpression(expression) {
-  const prepared = sanitizeExpression(expression);
-  const body = `return (${prepared});`;
-
-  const evaluator = new Function(
-    "Math",
-    "factorial",
-    "sinDeg",
-    "cosDeg",
-    "tanDeg",
-    "asinDeg",
-    "acosDeg",
-    "atanDeg",
-    "log10",
-    "lnMath",
-    "expMath",
-    "sqrtMath",
-    "cbrtMath",
-    body
-  );
-
-  const degreeFactor = calculatorState.degreeMode ? Math.PI / 180 : 1;
-  const trig = {
-    sinDeg: (value) => Math.sin(value * degreeFactor),
-    cosDeg: (value) => Math.cos(value * degreeFactor),
-    tanDeg: (value) => Math.tan(value * degreeFactor),
-    asinDeg: (value) => Math.asin(value) / degreeFactor,
-    acosDeg: (value) => Math.acos(value) / degreeFactor,
-    atanDeg: (value) => Math.atan(value) / degreeFactor,
+(function() {
+  const calculatorState = {
+    expression: "",
+    result: "0",
+    degreeMode: true,
   };
+  const displayEl = document.getElementById("display");
+  const historyPreviewEl = document.getElementById("historyPreview");
+  const copyResultBtn = document.getElementById("copyResult");
+  const modeToggleBtn = document.getElementById("modeToggle");
+  function updateDisplay() {
+    if (displayEl) {
+      let displayText = calculatorState.expression || calculatorState.result || "0";
 
-  const result = evaluator(
-    Math,
-    factorial,
-    trig.sinDeg,
-    trig.cosDeg,
-    trig.tanDeg,
-    trig.asinDeg,
-    trig.acosDeg,
-    trig.atanDeg,
-    Math.log10,
-    Math.log,
-    Math.exp,
-    Math.sqrt,
-    Math.cbrt
-  );
+      // Add ellipsis indicator if text is truncated due to character limit
+      if (displayText.length > 25) {
+        displayText = displayText.substring(0, 22) + "...";
+      }
 
-  return Number.isFinite(result) ? result : "Error";
-}
-
-function calculateResult() {
-  if (!calculatorState.expression) {
-    return;
-  }
-
-  const safeExpression = calculatorState.expression.replace(/!+/g, "!");
-  const result = evaluateExpression(safeExpression);
-  calculatorState.result = typeof result === "number" ? result.toString() : result;
-  calculatorState.expression = calculatorState.result;
-  if (typeof window !== "undefined" && window.historyManager) {
-    window.historyManager.addEntry(safeExpression, calculatorState.result);
-  }
-  updateDisplay();
-  updatePreview();
-}
-
-function handleButton(value) {
-  if (value === "clear") {
-    clearExpression();
-    return;
-  }
-  if (value === "backspace") {
-    backspace();
-    return;
-  }
-  if (value === "negate") {
-    negate();
-    return;
-  }
-  if (value === "=") {
-    calculateResult();
-    return;
-  }
-  if (value === "percent") {
-    calculatorState.expression += "%";
-  } else {
-    appendValue(value);
-  }
-  updateDisplay();
-}
-
-function toggleMode() {
-  calculatorState.degreeMode = !calculatorState.degreeMode;
-  modeToggleBtn.textContent = calculatorState.degreeMode ? "Deg" : "Rad";
-}
-
-function copyResult() {
-  if (navigator.clipboard && calculatorState.result) {
-    navigator.clipboard.writeText(calculatorState.result);
-  }
-}
-
-function attachCalculatorEvents() {
-  document.querySelectorAll(".btn").forEach((button) => {
-    button.addEventListener("click", () => handleButton(button.dataset.value));
-  });
-
-  if (copyResultBtn) {
-    copyResultBtn.addEventListener("click", copyResult);
-  }
-
-  if (modeToggleBtn) {
-    modeToggleBtn.addEventListener("click", toggleMode);
-  }
-
-  document.addEventListener("keydown", (event) => {
-    const key = event.key;
-    if (/^[0-9.+\-*/]$/.test(key)) {
-      handleButton(key);
-      event.preventDefault();
-    } else if (key === "Enter") {
-      calculateResult();
-      event.preventDefault();
-    } else if (key === "Backspace") {
-      backspace();
-      event.preventDefault();
-    } else if (key === "Escape") {
-      clearExpression();
-      event.preventDefault();
-    } else if (key === "%") {
-      handleButton("percent");
-      event.preventDefault();
+      displayEl.textContent = displayText;
     }
-  });
-}
+  }
+  function updatePreview() {
+    if (historyPreviewEl) {
+      historyPreviewEl.textContent = calculatorState.result === "0"
+        ? "No calculations yet."
+        : `Last result: ${calculatorState.result}`;
+    }
+  }
+  function appendValue(value) {
+    const expr = calculatorState.expression;
+    const lastChar = expr.slice(-1);
+    const operators = ["+", "-", "*", "/"];
+    const isOperator = operators.includes(value);
 
-window.addEventListener("DOMContentLoaded", () => {
-  updateDisplay();
-  updatePreview();
-  attachCalculatorEvents();
-  if (modeToggleBtn) {
+    if (calculatorState.result === "Error") {
+      calculatorState.result = "0";
+      calculatorState.expression = "";
+    }
+
+    if (expr.length >= 50) {
+      return;
+    }
+
+    if (isOperator && operators.includes(lastChar)) {
+      return;
+    }
+
+    if (value === ".") {
+      const lastNumber = expr.split(/[\+\-\*\/]/).pop();
+      if (lastNumber.includes(".")) {
+        return;
+      }
+    }
+
+    calculatorState.expression += value;
+    updateDisplay();
+  }
+  function extractLastNumber(expr) {
+    // Extract the last number from the expression (for decimal validation)
+    const numberMatch = expr.match(/([\d]+(?:\.[\d]+)?)(?!\d)/g);
+    return numberMatch ? numberMatch[numberMatch.length - 1] || "" : "";
+  }
+  function roundResult(value) {
+    if (typeof value !== "number" || !isFinite(value)) {
+      return value;
+    }
+    return parseFloat(value.toPrecision(15));
+  }
+  function validateParenthesesBalance(expression) {
+    // Check for matching parentheses
+    let balance = 0;
+    for (let i = 0; i < expression.length; i++) {
+      const char = expression[i];
+      if (char === "(") {
+        balance++;
+      } else if (char === ")") {
+        balance--;
+        if (balance < 0) return false; // Too many closing parentheses
+      }
+    }
+    return balance === 0; // Must have matching parentheses
+  }
+  function clearExpression() {
+    calculatorState.expression = "";
+    calculatorState.result = "0";
+    updateDisplay();
+    updatePreview();
+  }
+  function handleButtonErrorRecovery() {
+    // Handle error state recovery when user interacts with "Error"
+    if (calculatorState.result === "Error" && calculatorState.expression) {
+      // If "Error" is displayed but there's still an expression, clear everything
+      calculatorState.expression = "";
+      calculatorState.result = "0";
+      updateDisplay();
+      updatePreview();
+      return true;
+    }
+    return false;
+  }
+  function backspace() {
+    calculatorState.expression = calculatorState.expression.slice(0, -1);
+    updateDisplay();
+  }
+  function negate() {
+    const expr = calculatorState.expression;
+    if (!expr) {
+      calculatorState.expression = "-";
+      updateDisplay();
+      return;
+    }
+
+    // Find the last number in the expression
+    const lastDigitMatch = expr.match(/[\d.]\s*$/);
+    if (!lastDigitMatch) {
+      // If expression doesn't end in a number (e.g., "5 + "),
+      // we just negate the whole thing or add a minus
+      calculatorState.expression = expr.startsWith("-") ? expr.slice(1) : "-" + expr;
+      updateDisplay();
+      return;
+    }
+
+    // Find the start of the last number
+    let i = expr.length - 1;
+    while (i >= 0 && /[\d.]/.test(expr[i])) {
+      i--;
+    }
+
+    // Now expr[i+1...end] is the last number.
+    // Check if there's a minus sign immediately before it.
+    const beforeNumber = expr.slice(0, i + 1).trimEnd();
+    if (beforeNumber.endsWith("-")) {
+      // Remove the minus sign
+      const startOfMinus = beforeNumber.lastIndexOf("-");
+      calculatorState.expression = expr.slice(0, startOfMinus) + expr.slice(i + 1);
+    } else {
+      // Add a minus sign
+      calculatorState.expression = expr.slice(0, i + 1) + "-" + expr.slice(i + 1);
+    }
+
+    updateDisplay();
+  }
+  
+  function factorial(value) {
+    const num = Number(value);
+    if (!Number.isInteger(num) || num < 0) {
+      return NaN;
+    }
+    if (num === 0 || num === 1) {
+      return 1;
+    }
+    let result = 1;
+    for (let i = 2; i <= num; i += 1) {
+      result *= i;
+    }
+    return result;
+  }
+  function evaluateExpression(expression) {
+    try {
+      const sanitizedExpression = expression.replace(/%/g, '/100');
+      const result = math.evaluate(sanitizedExpression);
+      if (!Number.isFinite(result)) {
+        return "Error: Invalid expression";
+      }
+      return roundResult(result);
+    } catch (e) {
+      if (e.message.includes("Division by zero")) {
+        return "Error: Division by zero";
+      }
+      return "Error: Invalid expression";
+    }
+  }
+  function calculateResult() {
+    if (!calculatorState.expression) {
+      return;
+    }
+
+    // Validate parentheses balance before evaluation
+    if (!validateParenthesesBalance(calculatorState.expression)) {
+      calculatorState.result = "Error";
+      calculatorState.expression = "";
+      updateDisplay();
+      updatePreview();
+      return;
+    }
+
+    const result = evaluateExpression(calculatorState.expression);
+
+    // Apply floating-point precision rounding
+    const roundedResult = typeof result === "number" ? roundResult(result) : result;
+    calculatorState.result = typeof roundedResult === "number" ? roundedResult.toString() : roundedResult;
+    calculatorState.expression = calculatorState.result;
+    if (typeof window !== "undefined" && window.historyManager) {
+      window.historyManager.addEntry(calculatorState.expression, calculatorState.result);
+    }
+    updateDisplay();
+    updatePreview();
+  }
+  function handleButton(value) {
+    // Handle error state recovery
+    if (handleButtonErrorRecovery()) {
+      return;
+    }
+
+    if (value === "clear") {
+      clearExpression();
+      return;
+    }
+    if (value === "backspace") {
+      backspace();
+      return;
+    }
+    if (value === "negate") {
+      negate();
+      return;
+    }
+    if (value === "=") {
+      calculateResult();
+      return;
+    }
+    if (value === "percent") {
+      calculatorState.expression += "%";
+    } else {
+      appendValue(value);
+    }
+    updateDisplay();
+  }
+  function toggleMode() {
+    calculatorState.degreeMode = !calculatorState.degreeMode;
     modeToggleBtn.textContent = calculatorState.degreeMode ? "Deg" : "Rad";
   }
-});
+  function copyResult() {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(calculatorState.result).catch(err => {
+        console.error("Failed to copy result: ", err);
+      });
+    }
+  }
+  function attachCalculatorEvents() {
+    document.querySelectorAll(".btn").forEach((button) => {
+      button.addEventListener("click", () => handleButton(button.dataset.value));
+    });
+    if (copyResultBtn) {
+      copyResultBtn.addEventListener("click", copyResult);
+    }
+    if (modeToggleBtn) {
+      modeToggleBtn.addEventListener("click", toggleMode);
+    }
+    document.addEventListener("keydown", (event) => {
+      const key = event.key;
+      if (/^[0-9.+\-*/]$/.test(key)) {
+        handleButton(key);
+        event.preventDefault();
+      } else if (key === "Enter") {
+        calculateResult();
+        event.preventDefault();
+      } else if (key === "Backspace") {
+        backspace();
+        event.preventDefault();
+      } else if (key === "Escape") {
+        clearExpression();
+        event.preventDefault();
+      } else if (key === "%") {
+        handleButton("percent");
+        event.preventDefault();
+      }
+    });
+  }
+  window.addEventListener("DOMContentLoaded", () => {
+    updateDisplay();
+    updatePreview();
+    attachCalculatorEvents();
+    if (modeToggleBtn) {
+      modeToggleBtn.textContent = calculatorState.degreeMode ? "Deg" : "Rad";
+    }
+  });
+})();
