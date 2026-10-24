@@ -154,7 +154,11 @@
 
   const savedConsent = consentValue();
   if (savedConsent === "granted") startTracking();
-  else if (configured() && savedConsent === null) showConsent();
+  else if (configured() && savedConsent === null) {
+    global.setTimeout(() => {
+      if (consentValue() === null) showConsent();
+    }, 10_000);
+  }
 
   global.TrueCalcAnalytics = Object.freeze({
     showPreferences: showConsent,

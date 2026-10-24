@@ -251,6 +251,8 @@ test("calculator API rejects unknown tools", () => {
 test("analytics collects nothing before explicit consent", () => {
   const requests = [];
   const listeners = {};
+  let consentTimer;
+  let consentDelay;
   const localStorage = createMemoryStorage();
   const sessionStorage = createMemoryStorage();
   const elements = {
@@ -275,6 +277,11 @@ test("analytics collects nothing before explicit consent", () => {
       return { ok: true, status: 202 };
     },
     addEventListener() {},
+    setTimeout(callback, delay) {
+      consentTimer = callback;
+      consentDelay = delay;
+      return 1;
+    },
     setInterval() { return 1; },
     clearInterval() {},
   };
@@ -283,8 +290,47 @@ test("analytics collects nothing before explicit consent", () => {
   vm.runInNewContext(source, { window, document, console });
 
   assert.equal(requests.length, 0);
+  assert.equal(elements.analyticsConsent.hidden, true);
+  assert.equal(consentDelay, 10_000);
+  assert.equal(typeof consentTimer, "function");
+  consentTimer();
   assert.equal(elements.analyticsConsent.hidden, false);
   assert.equal(typeof listeners.accept, "function");
+});
+
+test("analytics consent prompt stays hidden if consent was saved during the delay", () => {
+  let consentTimer;
+  const localStorage = createMemoryStorage();
+  const elements = {
+    analyticsConsent: { hidden: true },
+    analyticsConsentStatus: { textContent: "" },
+    analyticsPreferences: { addEventListener() {} },
+    analyticsAccept: { addEventListener() {} },
+    analyticsReject: { addEventListener() {} },
+  };
+  const window = {
+    EASYCALC_SUPABASE_CONFIG: {
+      url: "https://project.supabase.co",
+      publishableKey: "public-test-key",
+    },
+    localStorage,
+    sessionStorage: createMemoryStorage(),
+    crypto: require("node:crypto").webcrypto,
+    addEventListener() {},
+    setTimeout(callback) {
+      consentTimer = callback;
+      return 1;
+    },
+    setInterval() { return 1; },
+    clearInterval() {},
+  };
+  const document = { getElementById: (id) => elements[id] || null };
+  const source = fs.readFileSync(path.join(__dirname, "../js/analytics.js"), "utf8");
+  vm.runInNewContext(source, { window, document, console });
+
+  localStorage.setItem("easycalc-analytics-consent", "denied");
+  consentTimer();
+  assert.equal(elements.analyticsConsent.hidden, true);
 });
 
 test("analytics sends only random visitor/session IDs after consent and deletes on withdrawal", async () => {
@@ -314,6 +360,7 @@ test("analytics sends only random visitor/session IDs after consent and deletes 
       return { ok: true, status: 202 };
     },
     addEventListener() {},
+    setTimeout() { return 1; },
     setInterval() { return 1; },
     clearInterval() {},
   };

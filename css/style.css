@@ -940,8 +940,8 @@ body.dark .calculator-feedback {
 .analytics-consent {
   position: fixed;
   z-index: 200;
+  top: max(1rem, env(safe-area-inset-top));
   right: max(1rem, env(safe-area-inset-right));
-  bottom: max(1rem, env(safe-area-inset-bottom));
   left: max(1rem, env(safe-area-inset-left));
   display: flex;
   align-items: center;
