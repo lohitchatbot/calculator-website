@@ -105,7 +105,7 @@
     consentPanel.hidden = false;
     if (status) {
       status.textContent = configured()
-        ? "The homepage loads two aggregate counts without a browser ID. Allowing optional analytics sends random browser/session IDs to count unique browsers and recent activity. No IP/MAC address, calculator input, or result is used."
+        ? "Allow consent to count anonymous visits; your calculator inputs and results are never collected."
         : "Analytics is not configured yet. No visitor analytics will be collected.";
     }
   }

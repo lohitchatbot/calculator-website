@@ -294,6 +294,10 @@ test("analytics collects nothing before explicit consent", () => {
   assert.equal(typeof consentTimer, "function");
   consentTimer();
   assert.equal(elements.analyticsConsent.hidden, false);
+  assert.equal(
+    elements.analyticsConsentStatus.textContent,
+    "Allow consent to count anonymous visits; your calculator inputs and results are never collected.",
+  );
   assert.equal(typeof listeners.accept, "function");
 });
 
