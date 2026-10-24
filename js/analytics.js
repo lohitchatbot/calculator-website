@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 EasyCalc
+ * Copyright (c) 2026 TrueCalc
  * Licensed under the MIT License
  */
 
@@ -52,7 +52,7 @@
     } catch (error) {
       if (!warningShown) {
         warningShown = true;
-        console.warn("EasyCalc analytics is disabled because browser storage is unavailable.", error);
+        console.warn("TrueCalc analytics is disabled because browser storage is unavailable.", error);
       }
       return;
     }
@@ -77,12 +77,12 @@
       );
       if (!response.ok && !warningShown) {
         warningShown = true;
-        console.warn(`EasyCalc analytics event was not accepted (HTTP ${response.status}).`);
+        console.warn(`TrueCalc analytics event was not accepted (HTTP ${response.status}).`);
       }
     } catch (error) {
       if (!warningShown) {
         warningShown = true;
-        console.warn("EasyCalc analytics could not reach its collection endpoint.", error);
+        console.warn("TrueCalc analytics could not reach its collection endpoint.", error);
       }
     }
   }
@@ -130,7 +130,7 @@
           global.localStorage.removeItem(visitorKey);
           global.sessionStorage.removeItem(sessionKey);
         } catch (error) {
-          console.warn("EasyCalc could not clear stored analytics identifiers.", error);
+          console.warn("TrueCalc could not clear stored analytics identifiers.", error);
         }
       };
       if (previousConsent === "granted" && global.localStorage.getItem(visitorKey)) {
@@ -156,7 +156,7 @@
   if (savedConsent === "granted") startTracking();
   else if (configured() && savedConsent === null) showConsent();
 
-  global.EasyCalcAnalytics = Object.freeze({
+  global.TrueCalcAnalytics = Object.freeze({
     showPreferences: showConsent,
   });
 })(window);

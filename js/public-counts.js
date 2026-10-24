@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 EasyCalc
+ * Copyright (c) 2026 TrueCalc
  * Licensed under the MIT License
  */
 
@@ -47,7 +47,7 @@
       activeCount.textContent = "—";
       uniqueCount.textContent = "—";
       status.textContent = "Counts temporarily unavailable";
-      console.warn("EasyCalc visitor counts are temporarily unavailable.", error);
+      console.warn("TrueCalc visitor counts are temporarily unavailable.", error);
     }
   }
 

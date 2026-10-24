@@ -1,4 +1,4 @@
-# EasyCalc: two public homepage counts with Supabase
+# TrueCalc: two public homepage counts with Supabase
 
 ## What this measures
 
@@ -7,7 +7,7 @@ The homepage shows just two small aggregate counts. There is no sign-in page or 
 1. **Unique browsers so far:** one count per browser that accepts optional analytics and keeps its random browser ID. It is not a guaranteed count of unique people. Clearing storage, private browsing, or using another browser/device may count the same person again. Visitors who decline are not counted.
 2. **Currently using the site:** distinct opted-in browsers with a heartbeat during the past 90 seconds. The homepage refreshes the aggregate counts every 10 seconds. This is an estimate; browser tabs closing, network loss, or blockers can delay updates.
 
-Websites cannot read a visitor's MAC address. This design does not use IP or MAC addresses as identifiers. The browser creates random IDs only after consent, the Edge Function HMACs them with a server-side secret, and the database stores only the HMAC values. Supabase may process ordinary network metadata to deliver requests; EasyCalc does not save IP addresses in its analytics tables.
+Websites cannot read a visitor's MAC address. This design does not use IP or MAC addresses as identifiers. The browser creates random IDs only after consent, the Edge Function HMACs them with a server-side secret, and the database stores only the HMAC values. Supabase may process ordinary network metadata to deliver requests; TrueCalc does not save IP addresses in its analytics tables.
 
 The homepage always fetches the two aggregate counts; that request contains no browser identifier. Declining prevents random browser/session IDs and heartbeats from being sent. Withdrawing prior consent requests deletion of the browser's visitor record and related active sessions, then removes its local IDs. If deletion requests are blocked, the record may remain; provide a site-owner contact path for deletion requests.
 

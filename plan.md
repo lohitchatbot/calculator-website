@@ -1,10 +1,10 @@
-# EasyCalc Master Product Vision and Platform Roadmap
+# TrueCalc Master Product Vision and Platform Roadmap
 
 ## Product Vision
 
-EasyCalc is evolving from a calculator collection into a comprehensive calculation platform.
+TrueCalc is evolving from a calculator collection into a comprehensive calculation platform.
 
-Built as an original platform with a focus on practicality, education, and trust. Every feature is designed and implemented natively for EasyCalc.
+Built as an original platform with a focus on practicality, education, and trust. Every feature is designed and implemented natively for TrueCalc.
 
 ### Core Principles
 
@@ -38,7 +38,7 @@ Built as an original platform with a focus on practicality, education, and trust
 - **Styling**: CSS custom properties with dark/light theme support
 - **Testing**: Node.js test runner for formula validation
 
-## EasyCalc Hubs
+## TrueCalc Hubs
 
 Six dedicated hubs for organized discovery:
 
@@ -61,7 +61,7 @@ Each hub includes:
 
 ## Calculator Framework
 
-A unified, reusable framework powering all EasyCalc calculators:
+A unified, reusable framework powering all TrueCalc calculators:
 
 ### Core Components
 - **Shared Validation** - Declarative field rules with accessible error messages
@@ -159,7 +159,7 @@ Building and maintaining user trust:
 - **Disclaimer System** - Appropriate disclaimers for finance/health tools
 - **Quality Assurance** - Continuous testing and validation
 
-**Footer Message:** *"Thank you for using EasyCalc. We appreciate every visit and continuously improve our calculators to make calculations faster, easier, and more accurate."*
+**Footer Message:** *"Thank you for using TrueCalc. We appreciate every visit and continuously improve our calculators to make calculations faster, easier, and more accurate."*
 
 ## Analytics
 
@@ -330,4 +330,4 @@ Prioritization based on: user value, implementation complexity, educational usef
 
 ## Final Notes
 
-This roadmap represents EasyCalc's original vision and strategy. All features are designed natively for the EasyCalc platform with a focus on accuracy, education, privacy, and user experience. The platform is built to scale into a comprehensive calculation resource that empowers users to understand and compute with confidence.
+This roadmap represents TrueCalc's original vision and strategy. All features are designed natively for the TrueCalc platform with a focus on accuracy, education, privacy, and user experience. The platform is built to scale into a comprehensive calculation resource that empowers users to understand and compute with confidence.

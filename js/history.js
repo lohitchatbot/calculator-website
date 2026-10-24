@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 EasyCalc
+ * Copyright (c) 2026 TrueCalc
  * Licensed under the MIT License
  */
 
@@ -43,8 +43,8 @@
       
       li.addEventListener("click", () => {
         const expression = entry.expression;
-        if (window.EasyCalc && typeof window.EasyCalc.setExpression === "function") {
-          window.EasyCalc.setExpression(expression);
+        if (window.TrueCalc && typeof window.TrueCalc.setExpression === "function") {
+          window.TrueCalc.setExpression(expression);
           return;
         }
         if (window.calculatorState) {

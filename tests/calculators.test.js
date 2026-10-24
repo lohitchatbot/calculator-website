@@ -53,7 +53,7 @@ function loadHistoryModule({ api, state }) {
   };
   const window = {
     calculatorState: state,
-    EasyCalc: api,
+    TrueCalc: api,
     addEventListener() {},
   };
   const source = fs.readFileSync(path.join(__dirname, "../js/history.js"), "utf8");

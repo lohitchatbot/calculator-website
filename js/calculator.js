@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 EasyCalc
+ * Copyright (c) 2026 TrueCalc
  * Licensed under the MIT License
  */
 
@@ -940,7 +940,7 @@
 
   if (global) {
     global.calculatorState = calculatorState;
-    global.EasyCalc = api;
+    global.TrueCalc = api;
   }
   if (typeof module !== "undefined" && module.exports) {
     module.exports = api;
