@@ -105,7 +105,7 @@
     consentPanel.hidden = false;
     if (status) {
       status.textContent = configured()
-        ? "The homepage loads two aggregate counts without a browser ID. Allowing optional analytics sends random browser/session IDs to count unique browsers and recent activity. No IP/MAC address, calculator input, or result is used. You can withdraw consent here later."
+        ? "The homepage loads two aggregate counts without a browser ID. Allowing optional analytics sends random browser/session IDs to count unique browsers and recent activity. No IP/MAC address, calculator input, or result is used."
         : "Analytics is not configured yet. No visitor analytics will be collected.";
     }
   }
@@ -139,8 +139,6 @@
     }
   }
 
-  const preferenceButton = document.getElementById("analyticsPreferences");
-  if (preferenceButton) preferenceButton.addEventListener("click", showConsent);
   const acceptButton = document.getElementById("analyticsAccept");
   if (acceptButton) acceptButton.addEventListener("click", () => setConsent("granted"));
   const rejectButton = document.getElementById("analyticsReject");
@@ -160,7 +158,4 @@
     }, 10_000);
   }
 
-  global.TrueCalcAnalytics = Object.freeze({
-    showPreferences: showConsent,
-  });
 })(window);

@@ -258,7 +258,6 @@ test("analytics collects nothing before explicit consent", () => {
   const elements = {
     analyticsConsent: { hidden: true },
     analyticsConsentStatus: { textContent: "" },
-    analyticsPreferences: { addEventListener() {} },
     analyticsAccept: { addEventListener(name, callback) { listeners.accept = callback; } },
     analyticsReject: { addEventListener(name, callback) { listeners.reject = callback; } },
   };
@@ -304,7 +303,6 @@ test("analytics consent prompt stays hidden if consent was saved during the dela
   const elements = {
     analyticsConsent: { hidden: true },
     analyticsConsentStatus: { textContent: "" },
-    analyticsPreferences: { addEventListener() {} },
     analyticsAccept: { addEventListener() {} },
     analyticsReject: { addEventListener() {} },
   };
@@ -341,7 +339,6 @@ test("analytics sends only random visitor/session IDs after consent and deletes 
   const elements = {
     analyticsConsent: { hidden: true },
     analyticsConsentStatus: { textContent: "" },
-    analyticsPreferences: { addEventListener() {} },
     analyticsAccept: { addEventListener(name, callback) { listeners.accept = callback; } },
     analyticsReject: { addEventListener(name, callback) { listeners.reject = callback; } },
   };
