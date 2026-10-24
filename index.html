@@ -3,36 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta
       name="description"
-      content="EasyCalc: Free online basic and scientific calculator for everyday math. Perfect for school, work, and home use with percentage calculations, trigonometry, logs, and dark mode support."
+      content="EasyCalc offers free online math, finance, health, and unit conversion calculators alongside a basic and scientific calculator."
     />
-    <meta name="keywords" content="online calculator, scientific calculator, basic calculator, percentage calculator, math calculator, free calculator, easy calculator">
     <meta name="author" content="EasyCalc">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://calculator-website-rose.vercel.app/">
-    <meta property="og:title" content="EasyCalc - Free Online Basic & Scientific Calculator">
-    <meta property="og:description" content="Fast and simple calculator for everyday math. Basic arithmetic, scientific functions, percentage calculations, and dark mode - all free.">
-    <meta property="og:image" content="https://calculator-website-rose.vercel.app/images/og-image.png">
+    <meta property="og:title" content="EasyCalc - Everyday Calculators">
+    <meta property="og:description" content="Explore practical math, finance, health, and unit conversion calculators, all in one place.">
+    <meta property="og:site_name" content="EasyCalc">
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://calculator-website-rose.vercel.app/">
-    <meta property="twitter:title" content="EasyCalc - Free Online Basic & Scientific Calculator">
-    <meta property="twitter:description" content="Fast and simple calculator for everyday math. Basic arithmetic, scientific functions, percentage calculations, and dark mode - all free.">
-    <meta property="twitter:image" content="https://calculator-website-rose.vercel.app/images/og-image.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:url" content="https://calculator-website-rose.vercel.app/">
+    <meta name="twitter:title" content="EasyCalc - Everyday Calculators">
+    <meta name="twitter:description" content="Explore practical math, finance, health, and unit conversion calculators, all in one place.">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://calculator-website-rose.vercel.app/">
     
-    <title>EasyCalc - Free Online Basic & Scientific Calculator | Everyday Math Tool</title>
+    <title>EasyCalc - Free Math, Finance, Health & Unit Calculators</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -45,7 +40,7 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "EasyCalc",
-      "description": "Free online basic and scientific calculator for everyday math. Features percentage calculations, trigonometry, logarithms, and dark mode support.",
+      "description": "Free online math, finance, health, and unit conversion calculators with a basic and scientific calculator.",
       "url": "https://calculator-website-rose.vercel.app/",
       "applicationCategory": "CalculatorApplication",
       "operatingSystem": "All",
@@ -53,7 +48,7 @@
         "@type": "Organization",
         "name": "EasyCalc"
       },
-      "featureList": "Basic arithmetic, scientific calculations, percentage calculator, trigonometry, logarithms, dark mode, calculation history",
+      "featureList": "Basic arithmetic, scientific calculations, percentage calculator, fraction calculator, loan payment calculator, compound interest calculator, BMI calculator, unit converter, calculation history",
       "license": "https://opensource.org/licenses/MIT"
     }
     </script>
@@ -68,7 +63,12 @@
     </header>
     <main class="container main-grid">
       <section class="main-content">
-        <h1>EasyCalc - Free Online Calculator for Everyday Math</h1>
+        <h1>Free calculators for everyday math, money, health, and conversions</h1>
+        <section class="visitor-counts" aria-label="EasyCalc visitor counts">
+          <span><strong id="activeVisitorCount">—</strong> online now</span>
+          <span><strong id="uniqueVisitorCount">—</strong> unique visitors so far</span>
+          <span class="visitor-count-note" id="visitorCountStatus" role="status" aria-live="polite">Live estimate</span>
+        </section>
         
         <section class="calculator-card" aria-label="Calculator">
           <div class="calculator-toolbar">
@@ -95,12 +95,13 @@
             </div>
             <div class="toolbar-actions">
               <button class="ghost-btn" id="copyResult">Copy result</button>
-              <button class="ghost-btn" id="modeToggle">Deg</button>
+              <button class="ghost-btn" id="modeToggle" aria-label="Angle mode: degrees">Deg</button>
             </div>
           </div>
           <div class="display-area">
             <div class="history-preview" id="historyPreview">No calculations yet.</div>
             <div class="display" id="display">0</div>
+            <div class="calculator-feedback" id="calculatorFeedback" role="status" aria-live="polite"></div>
           </div>
           <div
             role="tabpanel"
@@ -172,6 +173,51 @@
             </div>
           </div>
         </section>
+
+        <section class="tools-section" id="calculator-tools" aria-labelledby="tools-heading">
+          <div class="tools-heading">
+            <p class="eyebrow">Practical tools</p>
+            <h2 id="tools-heading">Find a calculator</h2>
+            <p>Choose a tool for a quick estimate. Your inputs stay in this browser.</p>
+          </div>
+          <div class="tool-categories">
+            <section class="tool-category" aria-labelledby="math-tools-heading">
+              <span class="category-icon" aria-hidden="true">∑</span>
+              <h3 id="math-tools-heading">Math</h3>
+              <p>Everyday number problems, made straightforward.</p>
+              <ul class="tool-links">
+                <li><button class="tool-link" type="button" data-open-calculator="percentage">Percentage calculator <span aria-hidden="true">→</span></button></li>
+                <li><button class="tool-link" type="button" data-open-calculator="fraction">Fraction calculator <span aria-hidden="true">→</span></button></li>
+              </ul>
+            </section>
+            <section class="tool-category" aria-labelledby="finance-tools-heading">
+              <span class="category-icon" aria-hidden="true">$</span>
+              <h3 id="finance-tools-heading">Finance</h3>
+              <p>Explore payments and how savings may grow.</p>
+              <ul class="tool-links">
+                <li><button class="tool-link" type="button" data-open-calculator="loan">Loan payment calculator <span aria-hidden="true">→</span></button></li>
+                <li><button class="tool-link" type="button" data-open-calculator="compound">Compound growth calculator <span aria-hidden="true">→</span></button></li>
+              </ul>
+            </section>
+            <section class="tool-category" aria-labelledby="health-tools-heading">
+              <span class="category-icon" aria-hidden="true">+</span>
+              <h3 id="health-tools-heading">Health</h3>
+              <p>Simple measurements for general information.</p>
+              <ul class="tool-links">
+                <li><button class="tool-link" type="button" data-open-calculator="bmi">BMI calculator <span aria-hidden="true">→</span></button></li>
+              </ul>
+            </section>
+            <section class="tool-category" aria-labelledby="conversion-tools-heading">
+              <span class="category-icon" aria-hidden="true">⇄</span>
+              <h3 id="conversion-tools-heading">Conversions</h3>
+              <p>Convert common measurements between units.</p>
+              <ul class="tool-links">
+                <li><button class="tool-link" type="button" data-open-calculator="conversion">Unit converter <span aria-hidden="true">→</span></button></li>
+              </ul>
+            </section>
+          </div>
+          <section class="calculator-card tool-workbench" id="toolWorkbench" aria-live="polite" hidden></section>
+        </section>
         
       </section>
       <aside class="sidebar">
@@ -182,14 +228,63 @@
           </div>
           <ul id="historyList" class="history-list"></ul>
         </section>
-        
+        <section class="info-card sidebar-guide" aria-labelledby="quick-tools-heading">
+          <h2 id="quick-tools-heading">Quick access</h2>
+          <p>Open a practical calculator without searching the directory.</p>
+          <ul class="tool-links">
+            <li><button class="tool-link" type="button" data-open-calculator="percentage">Percentage <span aria-hidden="true">→</span></button></li>
+            <li><button class="tool-link" type="button" data-open-calculator="loan">Loan payment <span aria-hidden="true">→</span></button></li>
+            <li><button class="tool-link" type="button" data-open-calculator="conversion">Unit converter <span aria-hidden="true">→</span></button></li>
+          </ul>
+        </section>
+        <section class="info-card sidebar-guide" aria-labelledby="keyboard-heading">
+          <h2 id="keyboard-heading">Keyboard shortcuts</h2>
+          <dl class="shortcut-list">
+            <div><dt><kbd>0–9</kbd> <kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd></dt><dd>Enter a calculation</dd></div>
+            <div><dt><kbd>Enter</kbd></dt><dd>Calculate</dd></div>
+            <div><dt><kbd>Backspace</kbd></dt><dd>Delete the last input</dd></div>
+            <div><dt><kbd>Esc</kbd></dt><dd>Clear the calculator</dd></div>
+            <div><dt><kbd>%</kbd> <kbd>( )</kbd> <kbd>!</kbd></dt><dd>Percent, parentheses, and factorial</dd></div>
+          </dl>
+        </section>
       </aside>
     </main>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.js"></script>
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <section aria-labelledby="trust-heading">
+          <h2 id="trust-heading">Trust and accuracy</h2>
+          <p>EasyCalc shows the formulas used by its practical tools. Results are estimates based on the values and assumptions shown, not professional medical, tax, or financial advice.</p>
+        </section>
+        <section aria-labelledby="privacy-heading">
+          <h2 id="privacy-heading">Privacy</h2>
+          <p>Calculator inputs and results stay in your browser and are never collected by analytics. If configured and accepted, random pseudonymous browser/session IDs are sent to EasyCalc's Supabase service to count unique browsers and recent activity. EasyCalc does not use IP or MAC addresses to identify visitors. You can change your choice here; withdrawing consent requests deletion of your browser's analytics record. Calculation history is kept only for the current page session. The site loads typefaces from Google Fonts.</p>
+          <button class="ghost-btn" id="analyticsPreferences" type="button">Analytics preferences</button>
+        </section>
+        <section aria-labelledby="contact-heading">
+          <h2 id="contact-heading">Contact and feedback</h2>
+          <p>Have a suggestion or found a problem? Write to us at <a href="mailto:lohitchatbot@gmail.com">lohitchatbot@gmail.com</a>. Please do not send private or sensitive information (passwords, credit card numbers, IDs, health records, or personal financial data) by email.</p>
+        </section>
+      </div>
+      <p class="footer-thanks">Thank you for using EasyCalc. We appreciate every visit and continuously improve our calculators to make calculations faster, easier, and more accurate.</p>
+      <p class="footer-copyright">© 2026 EasyCalc. All rights reserved.</p>
+    </footer>
+    <section class="analytics-consent" id="analyticsConsent" aria-labelledby="analyticsConsentTitle" hidden>
+      <div>
+        <h2 id="analyticsConsentTitle">Optional privacy-conscious usage analytics</h2>
+        <p id="analyticsConsentStatus">The homepage loads two aggregate counts without a browser ID. Allowing optional analytics sends random browser/session IDs to count unique browsers and recent activity; no IP/MAC address, calculator input, or result is used. You can withdraw consent here later.</p>
+      </div>
+      <div class="analytics-consent-actions">
+        <button class="ghost-btn" id="analyticsReject" type="button">Decline</button>
+        <button class="btn equals" id="analyticsAccept" type="button">Allow analytics</button>
+      </div>
+    </section>
+    <script src="js/supabase-config.js"></script>
     <script src="js/calculator.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/public-counts.js"></script>
+    <script src="js/calculators.js"></script>
     <script src="js/history.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/main.js"></script>
   </body>
-</html>e
+</html>

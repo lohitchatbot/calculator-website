@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 EasyCalc
+ * Licensed under the MIT License
+ */
+
 (function () {
   const navToggle = document.getElementById('navToggle');
   const topNav = document.getElementById('topNav');

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 EasyCalc
+ * Licensed under the MIT License
+ */
+
 (function () {
   const historyListEl = document.getElementById("historyList");
   const clearHistoryBtn = document.getElementById("clearHistory");
@@ -38,16 +43,18 @@
       
       li.addEventListener("click", () => {
         const expression = entry.expression;
+        if (window.EasyCalc && typeof window.EasyCalc.setExpression === "function") {
+          window.EasyCalc.setExpression(expression);
+          return;
+        }
         if (window.calculatorState) {
           window.calculatorState.expression = expression;
           window.calculatorState.result = "0";
-          if (typeof updateDisplay === "function") {
-            updateDisplay();
-          } else {
-            const displayEl = document.getElementById("display");
-            if (displayEl) {
-              displayEl.textContent = expression;
-            }
+          window.calculatorState.hasError = false;
+          window.calculatorState.justEvaluated = false;
+          const displayEl = document.getElementById("display");
+          if (displayEl) {
+            displayEl.textContent = expression;
           }
         }
       });

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 EasyCalc
+ * Licensed under the MIT License
+ */
+
 (function () {
   const themeToggle = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("calculator-theme");

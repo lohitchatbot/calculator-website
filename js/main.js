@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 EasyCalc
+ * Licensed under the MIT License
+ */
+
 // Manages the accessible tab functionality for the calculator modes.
 (function () {
   const tablist = document.querySelector('[role="tablist"]');
