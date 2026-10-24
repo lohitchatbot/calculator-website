@@ -522,17 +522,35 @@
     return calculatorState.expression || calculatorState.result || "0";
   }
 
+  function fitDisplayText() {
+    if (!displayEl) {
+      return;
+    }
+    displayEl.style.fontSize = "";
+    const availableWidth = displayEl.clientWidth;
+    let fontSize = Number.parseFloat(global.getComputedStyle(displayEl).fontSize);
+    const minimumFontSize = 12;
+    while (displayEl.scrollWidth > availableWidth && fontSize > minimumFontSize) {
+      fontSize = Math.max(
+        minimumFontSize,
+        fontSize * Math.max(0.7, availableWidth / displayEl.scrollWidth),
+      );
+      displayEl.style.fontSize = `${fontSize}px`;
+    }
+    displayEl.scrollLeft = displayEl.scrollWidth;
+  }
+
   function updateDisplay() {
     if (!displayEl) {
       return;
     }
     displayEl.textContent = displayText();
+    fitDisplayText();
     displayEl.classList.toggle("is-error", calculatorState.hasError);
     displayEl.classList.toggle(
       "is-invalid",
       !calculatorState.hasError && !isBalanced(calculatorState.expression)
     );
-    displayEl.scrollLeft = displayEl.scrollWidth;
   }
 
   function updatePreview() {
@@ -868,6 +886,12 @@
 
     if (copyResultBtn) {
       copyResultBtn.addEventListener("click", copyResult);
+    }
+
+    if (global.ResizeObserver && displayEl && displayEl.parentElement) {
+      new global.ResizeObserver(fitDisplayText).observe(displayEl.parentElement);
+    } else if (global.addEventListener) {
+      global.addEventListener("resize", fitDisplayText);
     }
     if (modeToggleBtn) {
       modeToggleBtn.addEventListener("click", toggleMode);
